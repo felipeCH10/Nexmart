@@ -1,31 +1,38 @@
-import type { CampoConfig, Entidade, Pagina } from '../models/types';
-import type { HttpClient } from './HttpClient';
+import type { CampoConfig, Entidade, Pagina } from '../entities/types';
+import { ApiRepository } from '../repositories/ApiRepository';
 
 export abstract class RecursoService<T extends Entidade> {
   abstract readonly caminho: string;
   abstract readonly titulo: string;
   abstract readonly campos: CampoConfig[];
 
-  constructor(protected readonly cliente: HttpClient) {}
+  private readonly cliente: ConstructorParameters<typeof ApiRepository<T>>[0];
+
+  constructor(cliente: ConstructorParameters<typeof ApiRepository<T>>[0]) {
+    this.cliente = cliente;
+  }
+
+  private get repositorio(): ApiRepository<T> {
+    return new ApiRepository<T>(this.cliente, this.caminho);
+  }
 
   listar(pagina: number, limite = 10): Promise<Pagina<T>> {
-    return this.cliente.requisitar<Pagina<T>>('GET', `/${this.caminho}?pagina=${pagina}&limite=${limite}`);
+    return this.repositorio.listar(pagina, limite);
   }
 
   buscar(id: number): Promise<T> {
-    return this.cliente.requisitar<T>('GET', `/${this.caminho}/${id}`);
+    return this.repositorio.buscar(id);
   }
 
   criar(dados: Record<string, unknown> | FormData): Promise<T> {
-    return this.cliente.requisitar<T>('POST', `/${this.caminho}`, dados);
+    return this.repositorio.criar(dados);
   }
 
   atualizar(id: number, dados: Record<string, unknown> | FormData): Promise<T> {
-    const metodo = dados instanceof FormData && this.caminho === 'produtos' ? 'POST' : 'PUT';
-    return this.cliente.requisitar<T>(metodo, `/${this.caminho}/${id}`, dados);
+    return this.repositorio.atualizar(id, dados);
   }
 
   excluir(id: number): Promise<{ mensagem: string }> {
-    return this.cliente.requisitar<{ mensagem: string }>('DELETE', `/${this.caminho}/${id}`);
+    return this.repositorio.excluir(id);
   }
 }
