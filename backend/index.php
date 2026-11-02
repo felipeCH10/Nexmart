@@ -130,8 +130,8 @@ try {
     // Produtos com imagem usam multipart/form-data, mas continuam no mesmo serviço.
     if (($partes[0] ?? null) === 'produtos' && in_array($metodo, ['POST', 'PUT'], true)) {
         $idProduto = isset($partes[1]) ? (int) $partes[1] : null;
-        if ($metodo === 'PUT' && (!$idProduto || count($partes) !== 2)) erro(404, 'Produto não encontrado.');
-        if ($metodo === 'PUT') {
+        if ($idProduto !== null) {
+            if (!$idProduto || count($partes) !== 2) erro(404, 'Produto não encontrado.');
             $existencia = $pdo->prepare('SELECT id FROM produtos WHERE id = :id');
             $existencia->execute([':id' => $idProduto]);
             if (!$existencia->fetch()) erro(404, 'Produto não encontrado.');
