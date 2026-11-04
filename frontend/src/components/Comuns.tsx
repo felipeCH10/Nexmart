@@ -117,7 +117,7 @@ export function Layout() {
   }
 
   return (
-    <>
+    <div className="app-layout">
       <nav className="menu">
         <Link className="marca" to="/catalogo">NEXMART</Link>
         <form className="busca" onSubmit={(e) => { e.preventDefault(); navegar(`/catalogo?busca=${encodeURIComponent(busca)}`); }}>
@@ -146,12 +146,12 @@ export function Layout() {
           Sair
         </button>
       </nav>
-      <main>
+        <main className="conteudo-loja">
         <Outlet />
       </main>
       <footer className="rodape" aria-label="Rodapé da loja">
         <strong>NEXMART</strong>
       </footer>
-    </>
+    </div>
   );
 }
