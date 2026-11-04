@@ -8,9 +8,9 @@ import { Alerta, Campo } from '../components/Comuns';
 import { useAuth } from '../context/AuthContext';
 import { lancarSeInvalido, mensagemSenha, validarCpf, validarEmail, ValidacaoError } from '../validators';
 
-function AuthLayout({ children }: { children: ReactNode }) {
+function AuthLayout({ children, classe = '' }: { children: ReactNode; classe?: string }) {
   return (
-    <div className="auth-pagina">
+    <div className={`auth-pagina ${classe}`}>
       <header className="auth-header">NEXMART</header>
       <div className="auth-conteudo">{children}</div>
       <footer className="auth-footer">NEXMART</footer>
@@ -69,7 +69,7 @@ export function LoginPage() {
   }
 
   return (
-    <AuthLayout>
+    <AuthLayout classe="auth-login">
       <form className="cartao auth-cartao" onSubmit={enviar}>
         <h1>Entrar</h1>
         {aviso && <Alerta tipo="sucesso">{aviso}</Alerta>}
@@ -146,7 +146,7 @@ export function CadastroPage() {
   }
 
   return (
-    <AuthLayout>
+    <AuthLayout classe="auth-cadastro">
       <form className="cartao auth-cartao" onSubmit={enviar}>
         <h1>Cadastro</h1>
         {erroApi && <Alerta tipo="erro">{erroApi}</Alerta>}
