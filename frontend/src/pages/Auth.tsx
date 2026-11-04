@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import type { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { ApiError, http, mensagemDe } from '../api';
 import { Alerta, Campo } from '../components/Comuns';
 import { useAuth } from '../context/AuthContext';
@@ -38,10 +39,32 @@ export function LoginPage() {
       lancarSeInvalido(novos);
       setErros({});
       await entrar(email, senha);
+      await Swal.fire({
+        title: 'Login realizado!',
+        text: 'Senha confirmada com sucesso.',
+        icon: 'success',
+        confirmButtonColor: '#111',
+      });
       navegar('/');
     } catch (err) {
-      if (err instanceof ValidacaoError) setErros(err.campos);
-      else setErroApi(mensagemDe(err));
+      if (err instanceof ValidacaoError) {
+        setErros(err.campos);
+        await Swal.fire({
+          title: 'Não foi possível entrar',
+          text: 'Confira os dados informados.',
+          icon: 'error',
+          confirmButtonColor: '#111',
+        });
+      } else {
+        const mensagem = mensagemDe(err);
+        setErroApi(mensagem);
+        await Swal.fire({
+          title: 'Erro ao entrar',
+          text: mensagem,
+          icon: 'error',
+          confirmButtonColor: '#111',
+        });
+      }
     }
   }
 
@@ -92,12 +115,32 @@ export function CadastroPage() {
         cpf: form.cpf,
         senha: form.senha,
       });
+      await Swal.fire({
+        title: 'Cadastro realizado!',
+        text: 'Sua conta foi criada com sucesso.',
+        icon: 'success',
+        confirmButtonColor: '#111',
+      });
       navegar('/login', { state: { mensagem: 'Cadastro realizado! Faça login.' } });
     } catch (err) {
-      if (err instanceof ValidacaoError) setErros(err.campos);
-      else {
+      if (err instanceof ValidacaoError) {
+        setErros(err.campos);
+        await Swal.fire({
+          title: 'Não foi possível cadastrar',
+          text: 'Confira os dados informados.',
+          icon: 'error',
+          confirmButtonColor: '#111',
+        });
+      } else {
         if (err instanceof ApiError) setErros(err.campos);
-        setErroApi(mensagemDe(err));
+        const mensagem = mensagemDe(err);
+        setErroApi(mensagem);
+        await Swal.fire({
+          title: 'Erro no cadastro',
+          text: mensagem,
+          icon: 'error',
+          confirmButtonColor: '#111',
+        });
       }
     }
   }
