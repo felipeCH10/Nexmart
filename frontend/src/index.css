@@ -49,8 +49,7 @@ main {
     color: #fff;
     flex-wrap: wrap;
     border-radius: 0 0 16px 16px;
-    background-image: linear-gradient(to bottom, #111 0%, #111 70%, rgba(251, 255, 4, 0.4) 100%);
-    box-shadow: 0 15px 30px rgba(251, 255, 4, 0.6);
+    box-shadow: 0 18px 36px rgba(251, 255, 4, 0.9), 0 4px 12px rgba(251, 255, 4, 0.75);
 }
 
 .menu a {
@@ -166,7 +165,7 @@ main {
     position: relative;
     z-index: 10;
     border-radius: 0 0 16px 16px;
-    box-shadow: 0 15px 30px rgba(251, 255, 4, 0.6);
+    box-shadow: 0 18px 36px rgba(251, 255, 4, 0.9), 0 4px 12px rgba(251, 255, 4, 0.75);
 }
 
 .auth-footer {
