@@ -15,6 +15,8 @@ main { max-width: 1180px; margin: 24px auto; padding: 0 20px; }
 .categorias-lista { position: absolute; z-index: 2; top: 28px; left: 0; display: grid; min-width: 230px; padding: 10px; background: #fff; box-shadow: 0 8px 20px #0003; border-radius: 6px; }
 .categorias-lista a { padding: 7px; color: #111; }
 .cartao { max-width: 420px; margin: 32px auto; padding: 24px; background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+.auth-pagina { max-width: none; min-height: 120vh; margin: 0; padding: 40px 20px; box-sizing: border-box; background: linear-gradient(#ffffffd9, #ffffffd9), url('/watermarked_img_15415446789373686445.jpg') top center / 100% auto no-repeat; overflow: auto; }
+.auth-cartao { margin: 0 auto; }
 .campo { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
 .campo input, .campo select { padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; }
 .botao-senha { align-self: flex-start; padding: 4px 8px; font-size: .85rem; }

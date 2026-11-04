@@ -35,17 +35,19 @@ export function LoginPage() {
   }
 
   return (
-    <form className="cartao" onSubmit={enviar}>
-      <h1>Entrar</h1>
-      {aviso && <Alerta tipo="sucesso">{aviso}</Alerta>}
-      {erroApi && <Alerta tipo="erro">{erroApi}</Alerta>}
-      <Campo rotulo="E-mail" valor={email} aoMudar={setEmail} erro={erros.email} />
-      <Campo rotulo="Senha" tipo="password" valor={senha} aoMudar={setSenha} erro={erros.senha} />
-      <button type="submit">Entrar</button>
-      <p>
-        Não tem conta? <Link to="/cadastro">Cadastre-se</Link>
-      </p>
-    </form>
+    <main className="auth-pagina">
+      <form className="cartao auth-cartao" onSubmit={enviar}>
+        <h1>Entrar</h1>
+        {aviso && <Alerta tipo="sucesso">{aviso}</Alerta>}
+        {erroApi && <Alerta tipo="erro">{erroApi}</Alerta>}
+        <Campo rotulo="E-mail" valor={email} aoMudar={setEmail} erro={erros.email} />
+        <Campo rotulo="Senha" tipo="password" valor={senha} aoMudar={setSenha} erro={erros.senha} />
+        <button type="submit">Entrar</button>
+        <p>
+          Não tem conta? <Link to="/cadastro">Cadastre-se</Link>
+        </p>
+      </form>
+    </main>
   );
 }
 
@@ -90,24 +92,26 @@ export function CadastroPage() {
   }
 
   return (
-    <form className="cartao" onSubmit={enviar}>
-      <h1>Cadastro</h1>
-      {erroApi && <Alerta tipo="erro">{erroApi}</Alerta>}
-      <Campo rotulo="Nome" valor={form.nome} aoMudar={mudar('nome')} erro={erros.nome} />
-      <Campo rotulo="E-mail" valor={form.email} aoMudar={mudar('email')} erro={erros.email} />
-      <Campo rotulo="CPF" valor={form.cpf} aoMudar={mudar('cpf')} erro={erros.cpf} />
-      <Campo rotulo="Senha" tipo="password" valor={form.senha} aoMudar={mudar('senha')} erro={erros.senha} />
-      <Campo
-        rotulo="Confirmar senha"
-        tipo="password"
-        valor={form.confirmar}
-        aoMudar={mudar('confirmar')}
-        erro={erros.confirmar}
-      />
-      <button type="submit">Cadastrar</button>
-      <p>
-        Já tem conta? <Link to="/login">Entrar</Link>
-      </p>
-    </form>
+    <main className="auth-pagina">
+      <form className="cartao auth-cartao" onSubmit={enviar}>
+        <h1>Cadastro</h1>
+        {erroApi && <Alerta tipo="erro">{erroApi}</Alerta>}
+        <Campo rotulo="Nome" valor={form.nome} aoMudar={mudar('nome')} erro={erros.nome} />
+        <Campo rotulo="E-mail" valor={form.email} aoMudar={mudar('email')} erro={erros.email} />
+        <Campo rotulo="CPF" valor={form.cpf} aoMudar={mudar('cpf')} erro={erros.cpf} />
+        <Campo rotulo="Senha" tipo="password" valor={form.senha} aoMudar={mudar('senha')} erro={erros.senha} />
+        <Campo
+          rotulo="Confirmar senha"
+          tipo="password"
+          valor={form.confirmar}
+          aoMudar={mudar('confirmar')}
+          erro={erros.confirmar}
+        />
+        <button type="submit">Cadastrar</button>
+        <p>
+          Já tem conta? <Link to="/login">Entrar</Link>
+        </p>
+      </form>
+    </main>
   );
 }
