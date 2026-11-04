@@ -6,6 +6,7 @@ main { max-width: 1180px; margin: 24px auto; padding: 0 20px; }
 .menu a { color: #f2c94c; text-decoration: none; }
 .menu .marca { color: #f2c94c; font-weight: 900; letter-spacing: .12em; font-size: 1.15rem; }
 .menu button { background: #f2c94c; color: #111; }
+.rodape { display: flex; justify-content: center; align-items: center; min-height: 72px; margin-top: 40px; padding: 14px 28px; color: #f2c94c; background: #111; letter-spacing: .12em; }
 .espaco { flex: 1; }
 .busca { display: flex; flex: 1; max-width: 520px; }
 .busca input { flex: 1; padding: 10px 12px; border: 0; border-radius: 6px 0 0 6px; }

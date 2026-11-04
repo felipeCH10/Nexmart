@@ -149,6 +149,9 @@ export function Layout() {
       <main>
         <Outlet />
       </main>
+      <footer className="rodape" aria-label="Rodapé da loja">
+        <strong>NEXMART</strong>
+      </footer>
     </>
   );
 }
