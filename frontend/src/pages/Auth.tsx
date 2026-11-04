@@ -1,10 +1,21 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
+import type { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ApiError, http, mensagemDe } from '../api';
 import { Alerta, Campo } from '../components/Comuns';
 import { useAuth } from '../context/AuthContext';
 import { lancarSeInvalido, mensagemSenha, validarCpf, validarEmail, ValidacaoError } from '../validators';
+
+function AuthLayout({ children }: { children: ReactNode }) {
+  return (
+    <div className="auth-pagina">
+      <header className="auth-header">NEXMART</header>
+      <div className="auth-conteudo">{children}</div>
+      <footer className="auth-footer">NEXMART</footer>
+    </div>
+  );
+}
 
 export function LoginPage() {
   const { entrar } = useAuth();
@@ -35,7 +46,7 @@ export function LoginPage() {
   }
 
   return (
-    <main className="auth-pagina">
+    <AuthLayout>
       <form className="cartao auth-cartao" onSubmit={enviar}>
         <h1>Entrar</h1>
         {aviso && <Alerta tipo="sucesso">{aviso}</Alerta>}
@@ -47,7 +58,7 @@ export function LoginPage() {
           Não tem conta? <Link to="/cadastro">Cadastre-se</Link>
         </p>
       </form>
-    </main>
+    </AuthLayout>
   );
 }
 
@@ -92,7 +103,7 @@ export function CadastroPage() {
   }
 
   return (
-    <main className="auth-pagina">
+    <AuthLayout>
       <form className="cartao auth-cartao" onSubmit={enviar}>
         <h1>Cadastro</h1>
         {erroApi && <Alerta tipo="erro">{erroApi}</Alerta>}
@@ -112,6 +123,6 @@ export function CadastroPage() {
           Já tem conta? <Link to="/login">Entrar</Link>
         </p>
       </form>
-    </main>
+    </AuthLayout>
   );
 }
