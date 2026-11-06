@@ -383,7 +383,7 @@ td {
 .produto-card {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: visible;
     border: 2px solid #171717;
     border-radius: 12px;
     background: #fff;
@@ -392,6 +392,8 @@ td {
 }
 
 .produto-card-header {
+    position: relative;
+    z-index: 2;
     padding: 8px 14px;
     color: #f2c94c;
     background: #111;
@@ -400,7 +402,7 @@ td {
     font-weight: 900;
     letter-spacing: .16em;
     text-align: center;
-    box-shadow: 0 3px 8px rgba(251, 255, 4, .28);
+    box-shadow: 0 6px 14px rgba(251, 255, 0, 0.45), 0 2px 6px rgba(251, 255, 0, 0.3);
 }
 
 .produto-card:hover {
