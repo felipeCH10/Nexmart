@@ -118,6 +118,7 @@ export function Layout() {
 
   const headerFixo = !(
     localizacao.pathname === '/carrinho' ||
+    localizacao.pathname === '/analise' ||
     /^\/(produtos|categorias)\/\d+\/editar$/.test(localizacao.pathname)
   );
 
