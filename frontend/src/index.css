@@ -54,8 +54,36 @@ main {
 }
 
 .menu a {
-    color: #f2c94c;
+    position: relative;
+    color: #fff;
     text-decoration: none;
+    font-family: 'Lemon Milk', Inter, system-ui, sans-serif;
+    transition: color .2s ease, transform .2s ease;
+}
+
+.menu a::after {
+    position: absolute;
+    right: 0;
+    bottom: -6px;
+    left: 0;
+    height: 2px;
+    content: '';
+    background: #f2c94c;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .25s ease;
+}
+
+.menu a:hover,
+.menu a:focus-visible {
+    color: #f2c94c;
+    transform: scale(1.06);
+}
+
+.menu a:hover::after,
+.menu a:focus-visible::after,
+.menu a:active::after {
+    transform: scaleX(1);
 }
 
 .menu .marca {
@@ -356,11 +384,22 @@ td {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid #e8e8e8;
+    border: 2px solid #171717;
     border-radius: 12px;
     background: #fff;
     box-shadow: 0 5px 18px #0000000d;
     transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.produto-card-header {
+    padding: 8px 14px;
+    color: #111;
+    background: #f2c94c;
+    font-family: 'Lemon Milk', Inter, system-ui, sans-serif;
+    font-size: .78rem;
+    font-weight: 900;
+    letter-spacing: .16em;
+    text-align: center;
 }
 
 .produto-card:hover {

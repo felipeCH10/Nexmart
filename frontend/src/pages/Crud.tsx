@@ -96,6 +96,7 @@ export function CatalogPage() {
         {visiveis.map((produto) => (
           <div className="col-12 col-sm-6 col-lg-4" key={produto.id}>
             <article className="produto-card card h-100">
+              <div className="produto-card-header">NEXMART</div>
               <div className="produto-imagem">
                 <img
                   src={imagensFalhas[produto.id] ? produto.imagem : imagemUrl(produto)}
