@@ -347,7 +347,8 @@ try {
             $totalStmt->execute($parametros);
             $total = (int) $totalStmt->fetchColumn();
 
-            $stmt = $pdo->prepare("SELECT $select FROM $tabela$filtroDono ORDER BY id DESC LIMIT :limite OFFSET :offset");
+            $ordem = in_array($tabela, ['categorias', 'produtos'], true) ? 'ASC' : 'DESC';
+            $stmt = $pdo->prepare("SELECT $select FROM $tabela$filtroDono ORDER BY id $ordem LIMIT :limite OFFSET :offset");
             foreach ($parametros as $nome => $valor) $stmt->bindValue($nome, $valor, PDO::PARAM_INT);
             $stmt->bindValue(':limite', $limite, PDO::PARAM_INT);
             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
