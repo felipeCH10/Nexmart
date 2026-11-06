@@ -300,10 +300,16 @@ td {
     border-radius: 12px;
 }
 .notificacao-carrinho {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    z-index: 20;
+    width: min(620px, calc(100% - 32px));
+    box-sizing: border-box;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 0 auto 16px;
     padding: 11px 16px;
     color: #166534;
     background: #dcfce7;
