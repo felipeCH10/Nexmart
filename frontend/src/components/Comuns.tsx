@@ -116,9 +116,14 @@ export function Layout() {
     navegar('/login');
   }
 
+  const headerFixo = !(
+    localizacao.pathname === '/carrinho' ||
+    /^\/(produtos|categorias)\/\d+\/editar$/.test(localizacao.pathname)
+  );
+
   return (
-    <div className="app-layout">
-      <nav className="menu">
+    <div className={`app-layout${headerFixo ? ' app-layout-header-fixo' : ''}`}>
+      <nav className={`menu${headerFixo ? ' menu-fixo' : ''}`}>
         <Link className="marca" to="/catalogo">NEXMART</Link>
         <form className="busca" onSubmit={(e) => { e.preventDefault(); navegar(`/catalogo?busca=${encodeURIComponent(busca)}`); }}>
           <input value={busca} onChange={(e) => { setBusca(e.target.value); navegar(`/catalogo?busca=${encodeURIComponent(e.target.value.trim())}`); }} placeholder="Buscar produtos..." aria-label="Buscar produtos" />
@@ -146,7 +151,7 @@ export function Layout() {
           Sair
         </button>
       </nav>
-        <main className="conteudo-loja">
+      <main className="conteudo-loja">
         <Outlet />
       </main>
       <footer className="rodape" aria-label="Rodapé da loja">
