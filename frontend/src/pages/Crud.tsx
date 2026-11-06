@@ -13,6 +13,7 @@ export function CatalogPage() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [carregando, setCarregando] = useState(true);
   const [mensagem, setMensagem] = useState('');
+  const [mensagemCarrinho, setMensagemCarrinho] = useState('');
   const [imagensFalhas, setImagensFalhas] = useState<Record<number, boolean>>({});
   const [parcelasAbertas, setParcelasAbertas] = useState<Record<number, boolean>>({});
   const { itens: carrinho, adicionar: adicionarProduto } = useCarrinho();
@@ -32,6 +33,12 @@ export function CatalogPage() {
     return () => { ativo = false; };
   }, []);
 
+  useEffect(() => {
+    if (!mensagemCarrinho) return;
+    const temporizador = window.setTimeout(() => setMensagemCarrinho(''), 3500);
+    return () => window.clearTimeout(temporizador);
+  }, [mensagemCarrinho]);
+
   const visiveis = produtos.filter((produto) => {
     const nomeCategoria = categorias.find((item) => item.id === produto.categoria_id)?.nome ?? '';
     return (!busca || produto.nome.toLocaleLowerCase().includes(busca)) &&
@@ -41,7 +48,7 @@ export function CatalogPage() {
   function adicionarAoCarrinho(produto: Produto) {
     if (produto.estoque < 1) return;
     adicionarProduto(produto);
-    setMensagem(`Produto ${produto.nome} adicionado ao carrinho.`);
+    setMensagemCarrinho(`Produto ${produto.nome} adicionado ao carrinho com sucesso.`);
   }
 
   const unidadesNoCarrinho = carrinho.reduce((total, item) => total + item.quantidade, 0);
@@ -54,6 +61,19 @@ export function CatalogPage() {
 
   return (
     <section>
+      {mensagemCarrinho && (
+        <div className="notificacao-carrinho" role="status">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 1.9-1.4L21 8H6" />
+            <circle cx="10" cy="20" r="1" />
+            <circle cx="18" cy="20" r="1" />
+            <path d="m9 11 2 2 4-4" />
+          </svg>
+          <span>{mensagemCarrinho}</span>
+          <span className="notificacao-seta" aria-hidden="true">→</span>
+          <Link to="/carrinho">Ir para o carrinho</Link>
+        </div>
+      )}
       <div className="hero">
         <p className="eyebrow">NEXMART</p>
         <h1>Escolhas inteligentes para todos os momentos.</h1>
