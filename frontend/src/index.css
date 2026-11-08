@@ -342,7 +342,7 @@ td {
 }
 .notificacao-carrinho {
     position: fixed;
-    top: 16px;
+    top: 92px;
     left: 50%;
     z-index: 20;
     width: min(620px, calc(100% - 32px));
