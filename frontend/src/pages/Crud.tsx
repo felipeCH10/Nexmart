@@ -164,12 +164,10 @@ export function CatalogPage() {
     </section>
   );
 }
-// ================= LISTAGEM (uma tela) =================
 export function CrudListaPage() {
   const { recurso = '' } = useParams();
   const servico = servicos[recurso];
   if (!servico) return <Navigate to="/categorias" replace />;
-  // key reinicia a página (e a paginação) ao trocar de recurso
   return <Lista key={recurso} recurso={recurso} servico={servico} />;
 }
 
@@ -268,7 +266,6 @@ function Lista({ recurso, servico }: ListaProps) {
   );
 }
 
-// ================= CADASTRO / EDIÇÃO (outra tela) =================
 export function CrudFormPage() {
   const { recurso = '', id } = useParams();
   const servico = servicos[recurso];
@@ -298,7 +295,7 @@ function Formulario({ recurso, servico, id }: FormularioProps) {
   const [erroApi, setErroApi] = useState('');
   const [foto, setFoto] = useState<File | null>(null);
 
-  // Carrega registro (se for edição) e as opções dos campos de relacionamento
+
   useEffect(() => {
     async function iniciar() {
       try {

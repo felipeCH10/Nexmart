@@ -1,5 +1,4 @@
 <?php
-// Funções de apoio: conexão PDO, respostas JSON, JWT e validações.
 
 function conectar(): PDO
 {
@@ -35,7 +34,6 @@ function lerJson(): array
     return $dados;
 }
 
-// ---------- JWT (HS256) ----------
 
 function base64url(string $texto): string
 {
@@ -68,7 +66,6 @@ function jwtValidar(string $token): ?array
     return $dados;
 }
 
-// Devolve o id do usuário logado ou responde 401.
 function exigirLogin(): int
 {
     $cabecalho = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
@@ -82,14 +79,12 @@ function exigirLogin(): int
     return (int) $dados['sub'];
 }
 
-// ---------- Validações ----------
 
 function validarEmail($email): bool
 {
     return is_string($email) && preg_match('/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/', $email) === 1;
 }
 
-// Mínimo 8 caracteres, com minúscula, maiúscula, número e símbolo.
 function validarSenha($senha): bool
 {
     return is_string($senha) && preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/', $senha) === 1;
@@ -114,7 +109,6 @@ function validarCpf($cpf): bool
     return true;
 }
 
-// Valida $dados conforme $regras. Retorna [valores_limpos, erros_por_campo].
 function validarCampos(array $regras, array $dados): array
 {
     $valores = [];

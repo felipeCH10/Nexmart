@@ -22,7 +22,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUsuario(null);
   }, []);
 
-  // Ao recarregar a página, recupera o usuário a partir do token salvo
   useEffect(() => {
     http.aoExpirarSessao = sair;
     if (!http.autenticado) return;

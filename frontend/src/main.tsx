@@ -11,7 +11,6 @@ import { CarrinhoPage } from './pages/Carrinho';
 import { AnalisePage } from './pages/Analise';
 import './index.css';
 
-// Só renderiza a área logada se houver usuário autenticado
 function AreaLogada() {
   const { usuario, carregando } = useAuth();
   if (carregando) return <p className="cartao">Carregando...</p>;
@@ -38,7 +37,6 @@ function App() {
   );
 }
 
-// getElementById só para montar a raiz do React (não é manipulação de DOM da interface)
 createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
     <HashRouter>

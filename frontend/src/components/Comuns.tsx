@@ -4,7 +4,6 @@ import { servicos } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { useCarrinho } from '../context/CarrinhoContext';
 
-// ---------- Campo genérico (input ou select) ----------
 interface CampoProps {
   rotulo: string;
   valor: string;
@@ -56,12 +55,10 @@ export function Campo({ rotulo, valor, aoMudar, tipo = 'text', erro, somenteLeit
   );
 }
 
-// ---------- Mensagem de erro/sucesso ----------
 export function Alerta({ tipo, children }: { tipo: 'erro' | 'sucesso'; children: string }) {
   return <p className={`alerta ${tipo}`}>{children}</p>;
 }
 
-// ---------- Paginação ----------
 interface PaginacaoProps {
   pagina: number;
   totalPaginas: number;
@@ -84,7 +81,6 @@ export function Paginacao({ pagina, totalPaginas, aoMudar }: PaginacaoProps) {
   );
 }
 
-// ---------- Layout da área logada (menu + conteúdo) ----------
 export function Layout() {
   const { usuario, sair } = useAuth();
   const navegar = useNavigate();
