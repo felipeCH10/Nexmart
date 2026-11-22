@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { Produto } from '../entities/types';
+import { ContextoAusenteError } from '../errors/ContextoAusenteError';
 
 export interface ItemCarrinho {
   produto: Produto;
@@ -80,6 +81,6 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
 
 export function useCarrinho(): CarrinhoValor {
   const valor = useContext(CarrinhoContext);
-  if (!valor) throw new Error('useCarrinho deve ser usado dentro de CarrinhoProvider');
+  if (!valor) throw new ContextoAusenteError('useCarrinho');
   return valor;
 }

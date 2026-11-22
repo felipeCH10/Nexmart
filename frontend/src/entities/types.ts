@@ -12,7 +12,14 @@ export interface LoginResposta {
 
 export interface Entidade {
   id: number;
-  [chave: string]: unknown;
+}
+
+export type MetodoHttp = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
+export interface Parcelamento {
+  total: number;
+  valorParcela: number;
+  comJuros: boolean;
 }
 
 export interface Categoria extends Entidade {

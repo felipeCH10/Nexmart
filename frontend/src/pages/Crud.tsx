@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ApiError, mensagemDe, servicos } from '../api';
+import { ApiError, categoriaService, mensagemDe, produtoService, servicos } from '../api';
 import type { CampoConfig, Categoria, Entidade, Produto } from '../entities/types';
 import type { RecursoService } from '../services/RecursoService';
 import { useCarrinho } from '../context/CarrinhoContext';
@@ -23,11 +23,11 @@ export function CatalogPage() {
 
   useEffect(() => {
     let ativo = true;
-    Promise.all([servicos.produtos.listar(1, 100), servicos.categorias.listar(1, 100)])
+    Promise.all([produtoService.listar(1, 100), categoriaService.listar(1, 100)])
       .then(([produtosResposta, categoriasResposta]) => {
         if (!ativo) return;
-        setProdutos(produtosResposta.dados as Produto[]);
-        setCategorias(categoriasResposta.dados as Categoria[]);
+        setProdutos(produtosResposta.dados);
+        setCategorias(categoriasResposta.dados);
       })
       .catch(() => { if (ativo) setMensagem('Não foi possível carregar o catálogo.'); })
       .finally(() => { if (ativo) setCarregando(false); });
@@ -233,17 +233,17 @@ function Lista({ recurso, servico }: ListaProps) {
               <td>{item.id}</td>
               {servico.campos.map((c) => (
                 <td key={c.nome}>
-                  {recurso === 'produtos' && c.nome === 'imagem' && item.imagem ? (
+                  {recurso === 'produtos' && c.nome === 'imagem' && (item as unknown as Record<string, unknown>).imagem ? (
                     <img
                       className="crud-imagem"
                       src={`/produto-${item.id}.jpg`}
-                      alt={String(item.nome)}
+                      alt={String((item as unknown as Record<string, unknown>).nome)}
                       onError={(e) => {
-                        e.currentTarget.src = String(item.imagem);
+                        e.currentTarget.src = String((item as unknown as Record<string, unknown>).imagem);
                       }}
                     />
                   ) : (
-                    String(item[c.nome] ?? '')
+                    String((item as unknown as Record<string, unknown>)[c.nome] ?? '')
                   )}
                 </td>
               ))}
@@ -303,7 +303,8 @@ function Formulario({ recurso, servico, id }: FormularioProps) {
         if (id !== undefined) {
           const registro = await servico.buscar(Number(id));
           const inicial: Valores = {};
-          servico.campos.forEach((c) => (inicial[c.nome] = String(registro[c.nome] ?? '')));
+          const dadosRegistro = registro as unknown as Record<string, unknown>;
+          servico.campos.forEach((c) => (inicial[c.nome] = String(dadosRegistro[c.nome] ?? '')));
           setValores(inicial);
         }
         const carregadas: Opcoes = {};
@@ -313,7 +314,7 @@ function Formulario({ recurso, servico, id }: FormularioProps) {
             const lista = await alvo.listar(1, 100);
             carregadas[c.nome] = lista.dados.map((item) => ({
               valor: String(item.id),
-              texto: `#${item.id} - ${String(item[c.relacao!.exibir])}`,
+              texto: `#${item.id} - ${String((item as unknown as Record<string, unknown>)[c.relacao!.exibir])}`,
             }));
           }
         }

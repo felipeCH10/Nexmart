@@ -4,7 +4,7 @@ import { ApiError, http, mensagemDe } from '../api';
 import type { Usuario } from '../entities/types';
 import { Alerta, Campo } from '../components/Comuns';
 import { useAuth } from '../context/AuthContext';
-import { lancarSeInvalido, mensagemSenha, validarCpf } from '../validators';
+import { lancarSeInvalido, mensagemSenha, validarCpf } from '../utils/validacoes';
 import { ValidacaoError } from '../errors/ValidacaoError';
 
 export function PerfilPage() {

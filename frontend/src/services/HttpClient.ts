@@ -1,5 +1,6 @@
 import { ApiError } from '../errors/ApiError';
 import { TokenInvalidoError } from '../errors/TokenInvalidoError';
+import type { MetodoHttp } from '../entities/types';
 
 interface CorpoErro {
   erro?: string;
@@ -23,7 +24,7 @@ export class HttpClient {
     else localStorage.setItem('token', valor);
   }
 
-  async requisitar<R>(metodo: string, caminho: string, corpo?: unknown): Promise<R> {
+  async requisitar<R>(metodo: MetodoHttp, caminho: string, corpo?: unknown): Promise<R> {
     const cabecalhos: Record<string, string> = {};
     if (!(corpo instanceof FormData)) cabecalhos['Content-Type'] = 'application/json';
     if (this.#token !== null) cabecalhos.Authorization = `Bearer ${this.#token}`;

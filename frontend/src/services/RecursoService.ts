@@ -1,18 +1,20 @@
 import type { CampoConfig, Entidade, Pagina } from '../entities/types';
 import { ApiRepository } from '../repositories/ApiRepository';
+import type { Repositorio } from '../repositories/Repositorio';
+import type { HttpClient } from './HttpClient';
 
 export abstract class RecursoService<T extends Entidade> {
   abstract readonly caminho: string;
   abstract readonly titulo: string;
   abstract readonly campos: CampoConfig[];
 
-  private readonly cliente: ConstructorParameters<typeof ApiRepository<T>>[0];
+  private readonly cliente: HttpClient;
 
-  constructor(cliente: ConstructorParameters<typeof ApiRepository<T>>[0]) {
+  constructor(cliente: HttpClient) {
     this.cliente = cliente;
   }
 
-  protected get repositorio(): ApiRepository<T> {
+  protected get repositorio(): Repositorio<T> {
     return new ApiRepository<T>(this.cliente, this.caminho);
   }
 

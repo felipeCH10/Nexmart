@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { servicos } from '../api';
+import { produtoService } from '../api';
 import type { Produto } from '../entities/types';
 
 const moeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -9,8 +9,8 @@ export function AnalisePage() {
   const [erro, setErro] = useState('');
 
   useEffect(() => {
-    servicos.produtos.listar(1, 100)
-      .then((resposta) => setProdutos(resposta.dados as Produto[]))
+    produtoService.listar(1, 100)
+      .then((resposta) => setProdutos(resposta.dados))
       .catch(() => setErro('Não foi possível carregar os dados da análise.'));
   }, []);
 

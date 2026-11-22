@@ -1,7 +1,8 @@
 import type { HttpClient } from '../services/HttpClient';
-import type { Entidade, Pagina } from '../entities/types';
+import type { Entidade, MetodoHttp, Pagina } from '../entities/types';
+import type { Repositorio } from './Repositorio';
 
-export class ApiRepository<T extends Entidade> {
+export class ApiRepository<T extends Entidade> implements Repositorio<T> {
   constructor(
     private readonly cliente: HttpClient,
     private readonly caminho: string,
@@ -19,7 +20,7 @@ export class ApiRepository<T extends Entidade> {
     return this.cliente.requisitar<T>('POST', `/${this.caminho}`, dados);
   }
 
-  atualizar(id: number, dados: Record<string, unknown> | FormData, metodo = 'PUT'): Promise<T> {
+  atualizar(id: number, dados: Record<string, unknown> | FormData, metodo: MetodoHttp = 'PUT'): Promise<T> {
     return this.cliente.requisitar<T>(metodo, `/${this.caminho}/${id}`, dados);
   }
 

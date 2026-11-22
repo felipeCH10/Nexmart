@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from 'react';
 import { http } from '../api';
 import type { LoginResposta, Usuario } from '../entities/types';
+import { ContextoAusenteError } from '../errors/ContextoAusenteError';
 
 interface AuthValor {
   usuario: Usuario | null;
@@ -48,6 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth(): AuthValor {
   const contexto = useContext(AuthContext);
-  if (contexto === null) throw new Error('useAuth deve ser usado dentro de AuthProvider');
+  if (contexto === null) throw new ContextoAusenteError('useAuth');
   return contexto;
 }
