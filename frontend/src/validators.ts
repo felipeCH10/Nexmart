@@ -1,11 +1,4 @@
-// Validações de UX no navegador. A autoridade final é sempre o PHP.
-
-export class ValidacaoError extends Error {
-  constructor(public readonly campos: Record<string, string>) {
-    super('Dados inválidos');
-    this.name = 'ValidacaoError';
-  }
-}
+import { ValidacaoError } from './errors/ValidacaoError';
 
 export function validarEmail(email: string): boolean {
   return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
@@ -24,7 +17,6 @@ export function validarCpf(valor: string): boolean {
   return true;
 }
 
-// Retorna a mensagem de erro, ou null se a senha é forte o bastante.
 export function mensagemSenha(senha: string): string | null {
   if (senha.length < 8) return 'A senha deve ter ao menos 8 caracteres.';
   if (!/[a-z]/.test(senha)) return 'Inclua uma letra minúscula.';

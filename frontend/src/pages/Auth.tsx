@@ -6,7 +6,8 @@ import Swal from 'sweetalert2';
 import { ApiError, http, mensagemDe } from '../api';
 import { Alerta, Campo } from '../components/Comuns';
 import { useAuth } from '../context/AuthContext';
-import { lancarSeInvalido, mensagemSenha, validarCpf, validarEmail, ValidacaoError } from '../validators';
+import { lancarSeInvalido, mensagemSenha, validarCpf, validarEmail } from '../validators';
+import { ValidacaoError } from '../errors/ValidacaoError';
 
 function AuthLayout({ children, classe = '' }: { children: ReactNode; classe?: string }) {
   return (

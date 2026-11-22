@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { finalizarCheckout, mensagemDe } from '../api';
 import { useCarrinho } from '../context/CarrinhoContext';
 import { Alerta } from '../components/Comuns';
-import { calcularParcelamento } from '../utils/parcelamento';
+import { ProdutoModelo } from '../entities/ProdutoModelo';
+import { PedidoModelo } from '../entities/PedidoModelo';
 
 const moeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 
@@ -15,10 +16,13 @@ export function CarrinhoPage() {
   const [imagensFalhas, setImagensFalhas] = useState<Record<number, boolean>>({});
   const [parcelasEscolhidas, setParcelasEscolhidas] = useState<Record<number, number>>({});
   const chaveCheckout = useRef(crypto.randomUUID().replace(/-/g, ''));
-  const total = itens.reduce((soma, item) => {
+  const pedido = new PedidoModelo(itens.map((item) => {
     const parcelas = parcelasEscolhidas[item.produto.id] ?? item.produto.parcelas_sem_juros;
-    return soma + calcularParcelamento(Number(item.produto.preco), parcelas, item.produto.parcelas_sem_juros, item.quantidade).total;
-  }, 0);
+    const produto = new ProdutoModelo(Number(item.produto.preco), item.produto.parcelas_sem_juros);
+    const precoFinal = produto.totalComJuros(parcelas);
+    return { quantidade: item.quantidade, preco: precoFinal };
+  }));
+  const total = pedido.total();
 
   async function finalizar() {
     if (finalizando || itens.length === 0) return;
@@ -60,7 +64,8 @@ export function CarrinhoPage() {
               />
               {(() => {
                 const parcelas = parcelasEscolhidas[item.produto.id] ?? item.produto.parcelas_sem_juros;
-                const calculoSelecionado = calcularParcelamento(Number(item.produto.preco), parcelas, item.produto.parcelas_sem_juros, item.quantidade);
+                const produto = new ProdutoModelo(Number(item.produto.preco), item.produto.parcelas_sem_juros);
+                const calculoSelecionado = produto.calcularParcelamento(parcelas, item.quantidade);
                 return (
                   <div className="item-detalhes">
                     <strong>{item.produto.nome}</strong>
@@ -74,7 +79,8 @@ export function CarrinhoPage() {
                       >
                         {Array.from({ length: item.produto.parcelas_com_juros }, (_, indice) => {
                           const parcelas = indice + 1;
-                          const calculo = calcularParcelamento(Number(item.produto.preco), parcelas, item.produto.parcelas_sem_juros, item.quantidade);
+                          const produto = new ProdutoModelo(Number(item.produto.preco), item.produto.parcelas_sem_juros);
+                          const calculo = produto.calcularParcelamento(parcelas, item.quantidade);
                           return <option className={calculo.comJuros ? 'parcela-com-juros' : 'parcela-sem-juros'} key={parcelas} value={parcelas}>
                             {parcelas}x de {moeda.format(calculo.valorParcela)} {calculo.comJuros ? 'com juros' : 'sem juros'}
                           </option>;
@@ -88,7 +94,8 @@ export function CarrinhoPage() {
               <input aria-label={`Quantidade de ${item.produto.nome}`} type="number" min="1" max={item.produto.estoque} value={item.quantidade} onChange={(e) => alterarQuantidade(item.produto.id, Number(e.target.value))} />
               {(() => {
                 const parcelas = parcelasEscolhidas[item.produto.id] ?? item.produto.parcelas_sem_juros;
-                const calculoSelecionado = calcularParcelamento(Number(item.produto.preco), parcelas, item.produto.parcelas_sem_juros, item.quantidade);
+                const produto = new ProdutoModelo(Number(item.produto.preco), item.produto.parcelas_sem_juros);
+                const calculoSelecionado = produto.calcularParcelamento(parcelas, item.quantidade);
                 return <strong>{moeda.format(calculoSelecionado.total)}</strong>;
               })()}
               <button type="button" onClick={() => remover(item.produto.id)}>Remover</button>

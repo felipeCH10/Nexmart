@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { ApiError, http, mensagemDe } from '../api';
-import type { Usuario } from '../api';
+import type { Usuario } from '../entities/types';
 import { Alerta, Campo } from '../components/Comuns';
 import { useAuth } from '../context/AuthContext';
-import { lancarSeInvalido, mensagemSenha, validarCpf, ValidacaoError } from '../validators';
+import { lancarSeInvalido, mensagemSenha, validarCpf } from '../validators';
+import { ValidacaoError } from '../errors/ValidacaoError';
 
 export function PerfilPage() {
   const { usuario, atualizarUsuario } = useAuth();

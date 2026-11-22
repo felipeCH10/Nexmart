@@ -12,7 +12,7 @@ export abstract class RecursoService<T extends Entidade> {
     this.cliente = cliente;
   }
 
-  private get repositorio(): ApiRepository<T> {
+  protected get repositorio(): ApiRepository<T> {
     return new ApiRepository<T>(this.cliente, this.caminho);
   }
 

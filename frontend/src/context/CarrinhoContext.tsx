@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { Produto } from '../api';
+import type { Produto } from '../entities/types';
 
 export interface ItemCarrinho {
   produto: Produto;

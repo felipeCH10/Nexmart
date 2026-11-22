@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { servicos } from '../api';
-import type { Produto } from '../api';
+import type { Produto } from '../entities/types';
 
 const moeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 

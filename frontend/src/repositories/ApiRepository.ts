@@ -19,8 +19,7 @@ export class ApiRepository<T extends Entidade> {
     return this.cliente.requisitar<T>('POST', `/${this.caminho}`, dados);
   }
 
-  atualizar(id: number, dados: Record<string, unknown> | FormData): Promise<T> {
-    const metodo = dados instanceof FormData && this.caminho === 'produtos' ? 'POST' : 'PUT';
+  atualizar(id: number, dados: Record<string, unknown> | FormData, metodo = 'PUT'): Promise<T> {
     return this.cliente.requisitar<T>(metodo, `/${this.caminho}/${id}`, dados);
   }
 

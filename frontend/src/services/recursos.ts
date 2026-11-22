@@ -1,5 +1,5 @@
-import type { CampoConfig, Categoria, Entidade, ItemPedido, Pedido, Produto } from '../models/types';
-import type { CheckoutResposta } from '../models/types';
+import type { CampoConfig, Categoria, Entidade, ItemPedido, Pedido, Produto } from '../entities/types';
+import type { CheckoutResposta } from '../entities/types';
 import { RecursoService } from './RecursoService';
 import { HttpClient } from './HttpClient';
 
@@ -24,6 +24,11 @@ export class ProdutoService extends RecursoService<Produto> {
     { nome: 'parcelas_com_juros', rotulo: 'Parcelas com juros', tipo: 'inteiro' },
     { nome: 'imagem', rotulo: 'Imagem do produto', tipo: 'texto', obrigatorio: false },
   ];
+
+  atualizar(id: number, dados: Record<string, unknown> | FormData): Promise<Produto> {
+    const metodo = dados instanceof FormData ? 'POST' : 'PUT';
+    return this.repositorio.atualizar(id, dados, metodo);
+  }
 }
 
 export class PedidoService extends RecursoService<Pedido> {

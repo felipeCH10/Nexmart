@@ -1,4 +1,5 @@
 import { ApiError } from '../errors/ApiError';
+import { TokenInvalidoError } from '../errors/TokenInvalidoError';
 
 interface CorpoErro {
   erro?: string;
@@ -15,7 +16,7 @@ export class HttpClient {
 
   set token(valor: string | null) {
     if (valor !== null && !/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(valor)) {
-      throw new Error('Token de autenticação inválido.');
+      throw new TokenInvalidoError();
     }
     this.#token = valor;
     if (valor === null) localStorage.removeItem('token');

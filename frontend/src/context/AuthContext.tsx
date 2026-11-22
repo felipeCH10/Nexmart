@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { http } from '../api';
-import type { LoginResposta, Usuario } from '../api';
+import type { LoginResposta, Usuario } from '../entities/types';
 
 interface AuthValor {
   usuario: Usuario | null;
@@ -22,7 +22,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUsuario(null);
   }, []);
 
-  // Ao recarregar a página, recupera o usuário a partir do token salvo
   useEffect(() => {
     http.aoExpirarSessao = sair;
     if (!http.autenticado) return;
