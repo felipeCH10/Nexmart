@@ -1,10 +1,8 @@
 <?php
-// Roteador da API. O Nginx remove o prefixo /api, então aqui as rotas começam em /auth, /usuarios, /categorias...
 require '/var/www/app/helpers.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-// Os 4 CRUDs (fora usuários). Os nomes de tabela/coluna vêm daqui, nunca do usuário.
 $recursos = [
     'categorias' => [
         'tabela' => 'categorias',
@@ -27,7 +25,7 @@ $recursos = [
     ],
     'pedidos' => [
         'tabela' => 'pedidos',
-        'dono' => true, // grava usuario_id do usuário logado
+        'dono' => true,
         'campos' => [
             'cliente' => ['tipo' => 'texto', 'max' => 100],
             'status' => ['tipo' => 'opcoes', 'opcoes' => ['aberto', 'pago', 'cancelado']],
@@ -68,7 +66,6 @@ try {
         exit;
     }
 
-    // ---------- AUTENTICAÇÃO ----------
     if ($partes === ['auth', 'login'] && $metodo === 'POST') {
         $dados = lerJson();
         $email = trim((string) ($dados['email'] ?? ''));
@@ -82,7 +79,6 @@ try {
         $stmt->execute([':email' => $email]);
         $usuario = $stmt->fetch();
 
-        // Mesma mensagem para e-mail inexistente e senha errada
         if (!$usuario || !password_verify($senha, $usuario['senha_hash'])) {
             erro(401, 'E-mail ou senha incorretos.');
         }
@@ -124,10 +120,8 @@ try {
         responder(201, ['mensagem' => 'Usuário cadastrado com sucesso.']);
     }
 
-    // ---------- A PARTIR DAQUI TUDO EXIGE TOKEN ----------
     $usuarioId = exigirLogin();
 
-    // Produtos com imagem usam multipart/form-data, mas continuam no mesmo serviço.
     if (($partes[0] ?? null) === 'produtos' && in_array($metodo, ['POST', 'PUT'], true)) {
         $idProduto = isset($partes[1]) ? (int) $partes[1] : null;
         if ($idProduto !== null) {
@@ -197,7 +191,6 @@ try {
         responder($atualizaProduto ? 200 : 201, $resposta->fetch());
     }
 
-    // Checkout consulta preço/estoque no banco e grava pedido e itens atomicamente.
     if ($partes === ['pedidos', 'checkout'] && $metodo === 'POST') {
         $dados = lerJson();
         $itensRecebidos = $dados['itens'] ?? null;
@@ -270,7 +263,6 @@ try {
         }
     }
 
-    // ---------- USUÁRIO ----------
     if ($partes === ['usuarios', 'me'] && $metodo === 'GET') {
         $stmt = $pdo->prepare('SELECT id, nome, email, cpf FROM usuarios WHERE id = :id');
         $stmt->execute([':id' => $usuarioId]);
@@ -308,7 +300,6 @@ try {
         $stmt->execute([':cpf' => $cpf, ':id' => $id]);
         if ($stmt->fetch()) erro(409, 'CPF já cadastrado.', ['cpf' => 'CPF já cadastrado.']);
 
-        // O e-mail não entra no UPDATE: é imutável também no banco.
         $stmt = $pdo->prepare('UPDATE usuarios SET nome = :nome, cpf = :cpf, senha_hash = :hash WHERE id = :id');
         $stmt->execute([
             ':nome' => $nome,
@@ -319,13 +310,11 @@ try {
         responder(200, ['id' => $id, 'nome' => $nome, 'email' => $atual['email'], 'cpf' => $cpf]);
     }
 
-    // ---------- CRUDs GENÉRICOS ----------
     if (isset($partes[0], $recursos[$partes[0]]) && count($partes) <= 2) {
         $cfg = $recursos[$partes[0]];
         $tabela = $cfg['tabela'];
         $id = isset($partes[1]) ? (int) $partes[1] : null;
 
-        // LISTAR (com paginação)
         if ($id === null && $metodo === 'GET') {
             $pagina = max(1, (int) ($_GET['pagina'] ?? 1));
             $limite = min(100, max(1, (int) ($_GET['limite'] ?? 10)));
@@ -363,7 +352,6 @@ try {
             ]);
         }
 
-        // CADASTRAR
         if ($id === null && $metodo === 'POST') {
             [$valores, $erros] = validarCampos($cfg['campos'], lerJson());
             if ($erros) erro(422, 'Dados inválidos.', $erros);
@@ -403,7 +391,6 @@ try {
             responder(201, $stmt->fetch());
         }
 
-        // Daqui para baixo a rota precisa de um id válido
         if ($id === null || $id < 1) {
             erro(404, 'Rota não encontrada.');
         }
@@ -423,13 +410,11 @@ try {
             if ((int) $dono->fetchColumn() !== $usuarioId) $registro = false;
         }
 
-        // BUSCAR POR ID
         if ($metodo === 'GET') {
             if (!$registro) erro(404, 'Registro não encontrado.');
             responder(200, $registro);
         }
 
-        // EDITAR (não edita o que não existe)
         if ($metodo === 'PUT') {
             if (!$registro) erro(404, 'Registro não encontrado.');
             [$valores, $erros] = validarCampos($cfg['campos'], lerJson());
@@ -470,7 +455,6 @@ try {
             responder(200, $stmt->fetch());
         }
 
-        // EXCLUIR (não exclui o que não existe)
         if ($metodo === 'DELETE') {
             if (!$registro) erro(404, 'Registro não encontrado.');
             if ($tabela === 'itens_pedido') {
@@ -496,10 +480,9 @@ try {
 
     erro(404, 'Rota não encontrada.');
 } catch (PDOException $e) {
-    // 23000 = violação de chave estrangeira / duplicidade
     if ($e->getCode() === '23000') {
         erro(409, 'Operação inválida: registro relacionado inexistente ou em uso por outro registro.');
     }
-    error_log($e->getMessage()); // detalhe só no log do servidor, nunca na resposta
+    error_log($e->getMessage());
     erro(500, 'Erro interno no servidor.');
 }
